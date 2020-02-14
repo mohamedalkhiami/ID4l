@@ -4,18 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSingerInfoTable extends Migration {
+class CreateSingerInfoTable extends Migration
+{
 
 	public function up()
 	{
-		Schema::create('Singer_Info', function(Blueprint $table) {
+		Schema::create('Singer_Info', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('Item_id')->unsigned();
 			$table->integer('user_id')->unsigned();
-			$table->string('sequence');
-			$table->string('singed');
-			$table->timestamp('created_date');
-			$table->string('created_by');
+			$table->string('sequence')->nullable();;
+			$table->string('singed')->nullable();;
+			$table->timestamp('created_date')->nullable();;
+			$table->string('created_by')->nullable();;
 		});
 	}
 
