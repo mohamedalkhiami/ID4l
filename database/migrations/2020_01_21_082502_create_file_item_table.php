@@ -24,17 +24,17 @@ class CreateFileItemTable extends Migration
 
 
 
-			$table->string('total_signer');
-			$table->string('completed_signer');
+			$table->string('total_signer')->nullable();
+			$table->string('completed_signer')->nullable();
 
-			$table->string('lock_status');
-			$table->string('lock_time');
-			$table->string('lock_code');
+			$table->string('lock_status')->nullable();
+			$table->string('lock_time')->nullable();
+			$table->string('lock_code')->nullable();
 
-			$table->timestamp('created_date')->useCurrent();
-			$table->string('created_by');
-			$table->timestamp('modified_date')->useCurrent();
-			$table->string('Modified_by');
+			$table->timestamp('created_date')->useCurrent()->nullable();
+			$table->string('created_by')->nullable();
+			$table->timestamp('modified_date')->useCurrent()->nullable();
+			$table->string('Modified_by')->nullable();
 		});
 	}
 
