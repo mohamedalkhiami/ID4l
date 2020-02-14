@@ -25,6 +25,9 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
+    "require": {
+        "rackspace/php-opencloud": "dev-master"
+    },
     "extra": {
         "laravel": {
             "dont-discover": []

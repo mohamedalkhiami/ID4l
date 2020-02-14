@@ -91,7 +91,7 @@ class FileItemController extends Controller
         $type = $request->input('type');
 
 
-        $symbol = DB::table("item_status")->get('status_display');
+        $symbol = DB::table("item_status")->get('status_display')->where($type, '=', '');
 
         $result = 1;
         $symbol1 = DB::table("file_item")->where('status_id', '=', $result)->count();
@@ -166,7 +166,7 @@ class FileItemController extends Controller
 
         );
 
-        $response = ["status" => "200", "message" => "success", "data" => $resposedata];
+        $response = ["status" => "200", "message" => "success", "data" => [$resposedata]];
 
         return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
     }
