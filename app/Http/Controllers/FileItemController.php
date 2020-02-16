@@ -49,7 +49,7 @@ class FileItemController extends Controller
 
         ////// viwer infor to add users
 
-        $lastInsertedId = $createFile->id;
+        // $lastInsertedId = $createFile->id;
         $data1 = array();
 
         foreach ($request->viwer_id as $key => $viwer_id) {
@@ -140,17 +140,15 @@ class FileItemController extends Controller
 
 
         $user_id = $request->input('user_id');
+
+
+        $user = DB::table('users')->where('user_id', '=', $user_id);
         $status_id = $request->input('status_id');
 
 
         $fileItem = DB::table('file_item')->get();
 
 
-        // if($user_id){
-        // $fileItem[$user_id]->completed_signer = +1 ;
-        // $fileItem->save();
-        // }
-        // // $fileItem = FileItemModel::where('id' , '=', $id)->get();
 
 
         $resposedata = array(
@@ -179,9 +177,9 @@ class FileItemController extends Controller
 
         $user_id = $request->input('user_id');
         $id = $request->input('id');
-        $fileItem = DB::table('file_item')->get();
+        $fileItem = DB::table('file_item')->where('id', '=', $id)->get();
 
-        // $fileItem = FileItemModel::where('id' , '=', $id)->get();
+
         $fileMessage = DB::table('message_log')->get();
 
         $resposedata = array(

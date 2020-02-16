@@ -14,9 +14,9 @@ class CreateViewerInfoTable extends Migration
 			$table->integer('Item_id')->unsigned();
 			$table->integer('user_id')->unsigned();
 			$table->timestamp('created_date')->useCurrent();
-			$table->string('created_by')->nullable();;
+			$table->string('created_by');
 			$table->timestamp('modified_date')->useCurrent();
-			$table->string('Modified_by')->nullable();
+			$table->string('Modified_by');
 		});
 	}
 
