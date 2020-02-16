@@ -66,7 +66,7 @@ class CreateForeignKeys extends Migration
 			$table->dropForeign('Singer_Info_user_id_foreign');
 		});
 		Schema::table('viewer_info', function (Blueprint $table) {
-			$table->dropForeign('viewer_Info_Item_id_foreign');
+			$table->dropForeign('viewer_info_Item_id_foreign');
 		});
 		Schema::table('viewer_info', function (Blueprint $table) {
 			$table->dropForeign('viewer_info_user_id_foreign');
