@@ -16,7 +16,7 @@ class CreateViewerInfoTable extends Migration
 			$table->timestamp('created_date')->useCurrent();
 			$table->string('created_by')->nullable();;
 			$table->timestamp('modified_date')->useCurrent();
-			$table->string('Modified_by')->nullable();;
+			$table->string('Modified_by')->nullable();
 		});
 	}
 
