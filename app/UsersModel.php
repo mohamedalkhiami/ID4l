@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class UsersModel extends Model
 {
-    protected $table = 'users';
+    protected $table = 'Users';
     public $timestamps = false;
-    protected $fillable = ['first_name','last_name','Firebase_Token'];
+    protected $fillable = ['first_name', 'last_name', 'Firebase_Token'];
 
     public function SignerModel()
     {
