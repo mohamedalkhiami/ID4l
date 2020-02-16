@@ -9,7 +9,7 @@ class CreateViewerInfoTable extends Migration
 
 	public function up()
 	{
-		Schema::create('viewer_Info', function (Blueprint $table) {
+		Schema::create('viewer_info', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('Item_id')->unsigned();
 			$table->integer('user_id')->unsigned();
@@ -22,6 +22,6 @@ class CreateViewerInfoTable extends Migration
 
 	public function down()
 	{
-		Schema::drop('viewer_Info');
+		Schema::drop('viewer_info');
 	}
 }
