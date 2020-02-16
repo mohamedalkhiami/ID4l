@@ -9,7 +9,7 @@ class CreateSingerInfoTable extends Migration
 
 	public function up()
 	{
-		Schema::create('Singer_Info', function (Blueprint $table) {
+		Schema::create('singer_info', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('Item_id')->unsigned();
 			$table->integer('user_id')->unsigned();
@@ -22,6 +22,6 @@ class CreateSingerInfoTable extends Migration
 
 	public function down()
 	{
-		Schema::drop('Singer_Info');
+		Schema::drop('singer_info');
 	}
 }
