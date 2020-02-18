@@ -172,15 +172,13 @@ class FileItemController extends Controller
 
     public function item_audit_trail(Request $request)
     {
-
-
-
         $user_id = $request->input('user_id');
         $id = $request->input('id');
-        $fileItem = DB::table('file_item')->where('id', '=', $id)->get();
+        $fileItem = DB::table('file_item')->get();
 
+        // $fileItem = FileItemModel::where('id' , '=', $id)->get();
 
-        $fileMessage = DB::table('message_log')->get();
+        // $fileMessage = DB::table('message_log')->get();
 
         $resposedata = array(
 
@@ -189,11 +187,11 @@ class FileItemController extends Controller
             'document_owner' => $fileItem[$id]->file_owner,
             'status' => $fileItem[$id]->status_id,
             'completion_status' => $fileItem[$id]->completed_signer,
-            // 'file_url' =>$fileItem[$id]->file_url,
-            'message_array' => [
-                'message' => $fileMessage[$id]->message,
-                'date'   => $fileMessage[$id]->created_date,
-            ]
+            'file_url' => $fileItem[$id]->file_url,
+            // 'message_array' => [
+            //     'message' => $fileMessage[$id]->message,
+            //     'date'   => $fileMessage[$id]->created_date,
+            // ]
 
         );
 
@@ -229,11 +227,14 @@ class FileItemController extends Controller
         );
 
         $addMessage = MessageLogModel::create([
-
+            'Item_id' => $lastInsertedId,
             'user_id' => $request->user_id,
 
             'message' => ' Viwer added ',
+
+
         ]);
+
         $response = ["status" => "200", "message" => "success", "data" => $resposedata];
         return response($response, 200, ["Content-Type" => "application/json"]);
     }
@@ -270,7 +271,7 @@ class FileItemController extends Controller
 
         $file = FileItemModel::where('id', '=', $Item_id)->first();
 
-        $file->status_id = 3;
+        $file->status_id = 2;
 
         $file->save();
 
@@ -408,7 +409,7 @@ class FileItemController extends Controller
             MessageLogModel::create([
 
                 'user_id' => $request->user_id,
-
+                'Item_id' => $request->Item_id,
                 'message' => ' file locked ',
             ]);
         }
@@ -422,10 +423,12 @@ class FileItemController extends Controller
     {
 
 
-        $user_id = $request->input('user_id');
-        $first_name = $request->input('first_name');
-        $last_name = $request->input('last_name');
-        $Firebase_Token = $request->input('Firebase_Token');
+        // $user_id = $request->input('user_id');
+        // $first_name = $request->input('first_name');
+        // $last_name = $request->input('last_name');
+        // $Firebase_Token = $request->input('Firebase_Token');
+
+        $input = $request->all();
 
         // if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
         //     $user = Auth::user(); 
@@ -435,10 +438,12 @@ class FileItemController extends Controller
         //     return response()->json(['error'=>'Unauthorised'], 401); 
         //     } 
 
+        $data =  DB::table('users')->get('user_id');
 
-        $response = ["status" => "200", "message" => "success"];
+        // $data = UsersModel::where($user_id, '=', 'user_id')->get(['user_id', 'first_name'])->first();
+        $response = ["status" => "200", "message" => "success", 'data' => $data];
 
-        return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+        return response(json_encode($response), 200, ["Content-Type" => "application/json"]);
     }
 
 

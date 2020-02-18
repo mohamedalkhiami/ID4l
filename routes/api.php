@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('users', 'UsersController@show');
+// Route::get('users', 'UsersController@show');
 
 
 
 
-Route::post('login', 'UsersController@UserLogIn');
+// Route::post('login', 'UsersController@UserLogIn');
 
 
 
@@ -62,3 +62,6 @@ Route::post('e_sign_file', 'FileItemController@e_sign_file');
 
 
 Route::post('lock_file', 'FileItemController@lock_file');
+
+
+Route::post('login', 'FileItemController@login');
