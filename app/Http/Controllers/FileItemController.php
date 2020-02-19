@@ -12,7 +12,8 @@ use App\ViewerInfoModel;
 use Dotenv\Regex\Result;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class FileItemController extends Controller
 {
@@ -20,6 +21,17 @@ class FileItemController extends Controller
     public function SendFile(Request $request)
     {
 
+
+
+
+        //$filePath = $request->file('file_url')->store('public');
+
+        $insert =  Storage::put('public', $request->file('file_url'));
+
+        $url = Storage::url($insert);
+
+
+        $path = storage_path($url);
         $createFile = FileItemModel::create([
 
             'title' => $request->title,
@@ -27,9 +39,10 @@ class FileItemController extends Controller
             'status_id' => $request->status_id,
             'sign_id' => $request->sign_id,
             'sign_sequence_id' => $request->sign_sequence_id,
-            'file_url' => $request->file_url,
+            'file_url' => $url
 
         ]);
+        // dd($path);
 
         $lastInsertedId = $createFile->id;
         $data = array();
@@ -76,13 +89,25 @@ class FileItemController extends Controller
             'sign_sequence_id' => $request->sign_sequence_id,
             'singer' => $data,
             'viewer' => $data1,
-            'file_url' => $request->file_url,
+            'file_url' => asset('/storage/' . $insert),
         );
+
+
+        // return asset('/storage/' . $insert);
+
+
+
+        // return Response::make(file_get_contents(asset('/storage/' . $insert)), 200, [
+        //     'Content-Type' => 'application/pdf',
+
+        // ]);
+
 
 
         $response = ["status" => "200", "message" => "success", "data" => $resposedata];
         return response($response, 200, ["Content-Type" => "application/json"]);
     }
+
 
     public function inbox_by_status(Request $request)
     {
@@ -90,10 +115,16 @@ class FileItemController extends Controller
         $user_id = $request->input('user_id');
         $type = $request->input('type');
 
+        $userCheck = DB::table('users')->where('user_id', '=', $user_id)->get('user_id');
 
-        $symbol = DB::table("item_status")->get('status_display')->where($type, '=', '');
+        // $symbol = DB::table("item_status")->get('status_display')->where($user_id, '=', 'user_id');
+
+        $users = UsersModel::where('user_id', $user_id)->get();
+
+
 
         $result = 1;
+
         $symbol1 = DB::table("file_item")->where('status_id', '=', $result)->count();
 
         $result2 = 2;
@@ -102,37 +133,54 @@ class FileItemController extends Controller
         $result3 = 3;
         $symbol3 = DB::table("file_item")->where('status_id', '=', $result3)->count();
 
+
+
         $result4 = 4;
         $symbol4 = DB::table("file_item")->where('status_id', '=', $result4)->count();
+
+        $result5 = 5;
+        $symbol5 = DB::table("file_item")->where('status_id', '=', $result4)->count();
+
+
+
+
 
 
         $info = array(
             [
-                'status display ' => 'Require Signature',
+                'status display ' => DB::table('item_status')->where('status_id', '=', $result)->first('status_display'),
                 'count' => $symbol1,
             ],
             [
-                'status display ' => 'Deleted',
+                'status display ' => DB::table('item_status')->where('status_id', '=', $result2)->first('status_display'),
                 'count' => $symbol2,
             ],
             [
-                'status display ' => 'Declined',
+                'status display ' => DB::table('item_status')->where('status_id', '=', $result3)->first('status_display'),
                 'count' => $symbol3,
             ],
             [
-                'status display ' => 'Completed',
+                'status display ' => DB::table('item_status')->where('status_id', '=', $result4)->first('status_display'),
                 'count' => $symbol4,
             ],
+            [
+                'status display ' => DB::table('item_status')->where('status_id', '=', $result5)->first('status_display'),
+                'count' => $symbol5,
+            ]
 
 
         );
-        $response = ["data" => $info];
-        return response(json_encode($response), 200, ["Content-Type" => "application/json"]);
 
-        //   $response = ["status" => "200", "message" => "success","data"=>$symbol];
-        //   return response(json_encode($response), 200, ["Content-Type" => "application/json"]);
-
+        if (UsersModel::where('user_id', $request->user_id)->exists()) {
+            $response = ["data" => $info];
+            return response(json_encode($response), 200, ["Content-Type" => "application/json"]);
+        } else {
+            $response = ["message" => "user not exist "];
+            return response(json_encode($response), 200);
+        }
     }
+
+
 
 
     public function inbox_list(Request $request)

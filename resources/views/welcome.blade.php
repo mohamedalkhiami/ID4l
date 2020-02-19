@@ -96,5 +96,7 @@
                 </div>
             </div>
         </div>
+           
+       {{asset('/storage/MVHTtXtM6Jg9AUR49nqokr3QJ0HZaTLvlCYMIGWE.pdf')}} 
     </body>
 </html>
