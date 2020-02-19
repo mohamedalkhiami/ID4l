@@ -39,7 +39,7 @@ class FileItemController extends Controller
             'status_id' => $request->status_id,
             'sign_id' => $request->sign_id,
             'sign_sequence_id' => $request->sign_sequence_id,
-            'file_url' => $url
+            'file_url' => asset('/storage/' . $insert),
 
         ]);
         // dd($path);
