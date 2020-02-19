@@ -66,3 +66,7 @@ Route::post('lock_file', 'FileItemController@lock_file');
 
 Route::post('login', 'FileItemController@login');
 Route::post('display', 'FileItemController@display');
+
+
+
+Route::post('pki', 'FileItemController@newFunc');
