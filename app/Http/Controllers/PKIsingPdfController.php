@@ -15,6 +15,7 @@ class PKIsingPdfController extends Controller
         $document = $request->input('document');
         $token = $request->input('token');
 
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -24,6 +25,7 @@ class PKIsingPdfController extends Controller
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => "{\n\t\t\"id\":\"876543210123\", \n\t\t\"document\": \"$document\"\n\t\n}",
