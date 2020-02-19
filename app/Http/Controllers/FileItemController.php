@@ -24,14 +24,14 @@ class FileItemController extends Controller
 
 
 
-        //$filePath = $request->file('file_url')->store('public');
+        $filePath = $request->file('file_url')->store('public');
 
         $insert =  Storage::put('public', $request->file('file_url'));
 
         $url = Storage::url($insert);
 
 
-        $path = storage_path($url);
+        $path = basename($filePath);
         $createFile = FileItemModel::create([
 
             'title' => $request->title,
@@ -39,7 +39,7 @@ class FileItemController extends Controller
             'status_id' => $request->status_id,
             'sign_id' => $request->sign_id,
             'sign_sequence_id' => $request->sign_sequence_id,
-            'file_url' => asset('/storage/' . $insert),
+            'file_url' => asset('/storage/' . $path),
 
         ]);
         // dd($path);
@@ -89,11 +89,11 @@ class FileItemController extends Controller
             'sign_sequence_id' => $request->sign_sequence_id,
             'singer' => $data,
             'viewer' => $data1,
-            'file_url' => asset('/storage/' . $insert),
+            'file_url' => asset('/storage/' . $path),
         );
 
 
-        // return asset('/storage/' . $insert);
+        // return asset('/storage/' . $path);
 
 
 
