@@ -69,4 +69,4 @@ Route::post('display', 'FileItemController@display');
 
 
 
-Route::post('pki', 'FileItemController@newFunc');
+Route::post('PKIsign', 'PKIsingPdfController@PKIsign');
