@@ -34,6 +34,7 @@ class FileItemController extends Controller
 
 
         $path = basename($filePath);
+
         $createFile = FileItemModel::create([
 
             'title' => $request->title,
@@ -41,7 +42,7 @@ class FileItemController extends Controller
             'status_id' => $request->status_id,
             'sign_id' => $request->sign_id,
             'sign_sequence_id' => $request->sign_sequence_id,
-            // 'file_url' => asset('/storage/' . $path),
+            'file_url' => asset('/storage/' . $path),
 
         ]);
 
@@ -142,7 +143,7 @@ class FileItemController extends Controller
         $symbol4 = DB::table("file_item")->where('status_id', '=', $result4)->count();
 
         $result5 = 5;
-        $symbol5 = DB::table("file_item")->where('status_id', '=', $result4)->count();
+        $symbol5 = DB::table("file_item")->where('status_id', '=', $result5)->count();
 
 
 
