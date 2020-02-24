@@ -52,7 +52,6 @@ Route::post('decline_signature', 'FileItemController@decline_signature');
 Route::post('delete_file', 'FileItemController@delete_file');
 
 
-Route::post('pki_sign_file', 'FileItemController@pki_sign_file');
 
 
 Route::post('signed', 'FileItemController@signed');
@@ -69,7 +68,7 @@ Route::post('display', 'FileItemController@display');
 
 
 
-Route::post('PKIsign', 'PKIsingPdfController@PKIsign');
+Route::post('pki_sign_file', 'PKIsingPdfController@pki_sign_file');
 
 
 Route::post('item', 'ArrayAPI@item');

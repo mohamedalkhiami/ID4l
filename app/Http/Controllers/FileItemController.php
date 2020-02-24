@@ -125,7 +125,6 @@ class FileItemController extends Controller
         $symbol3 = DB::table("file_item")->where('status_id', '=', $result3)->count();
 
 
-
         $result4 = 4;
         $symbol4 = DB::table("file_item")->where('status_id', '=', $result4)->count();
 
@@ -211,6 +210,8 @@ class FileItemController extends Controller
 
     public function item_audit_trail(Request $request)
     {
+
+
         $user_id = $request->input('user_id');
         $id = $request->input('id');
         $fileItem = DB::table('file_item')->get();
@@ -244,57 +245,75 @@ class FileItemController extends Controller
     public function add_viewer(Request $request)
     {
 
-        $user_id = $request->input('user_id');
-        $item_id = $request->input('item_id');
+        if (UsersModel::where('user_id', $request->user_id)->exists()) {
+            $user_id = $request->input('user_id');
+            $item_id = $request->input('item_id');
 
-        $lastInsertedId = $request->input('item_id');
+            // $lastInsertedId = $request->input('item_id');
 
-        $data1 = array();
+            $viewers = $request->input('viewer');
 
-        foreach ($request->viwer_id as $key => $viwer_id) {
+            // loop through all viwer
+            foreach ($viewers as $viewer) {
 
-            $createFile = SignerInfoModel::create([
-                'Item_id' => $lastInsertedId,
-                'user_id' => $request->viwer_id[$key]
-            ]);
-            $data1[] = array('user_id' => $request->viwer_id[$key]);
+                $viewer['user_id'];
+
+                $createFile = ViewerInfoModel::create([
+                    'Item_id' => $item_id,
+                    'user_id' => $viewer['user_id']
+
+                ]);
+
+                $addMessage = MessageLogModel::create([
+
+                    'Item_id' => $item_id,
+                    'user_id' => $viewer['user_id'],
+                    'message' => ' Viwer added ',
+                ]);
+            }
+
+
+            $response = ["status" => "200", "message" => "success", "data" => $createFile];
+            return response($response, 200, ["Content-Type" => "application/json"]);
+        } else {
+            $response = ["message" => "user not exist "];
+            return response(json_encode($response), 200);
         }
-
-        $resposedata = array(
-            'viewer' => $data1,
-
-        );
-
-        $addMessage = MessageLogModel::create([
-            'Item_id' => $lastInsertedId,
-            'user_id' => $request->user_id,
-
-            'message' => ' Viwer added ',
-
-
-        ]);
-
-        $response = ["status" => "200", "message" => "success", "data" => $resposedata];
-        return response($response, 200, ["Content-Type" => "application/json"]);
     }
 
 
     public function reply_message(Request $request)
     {
+        $user_id = $request->input('user_id');
+        $id = $request->input('id');
+        $message = $request->input('message');
 
-        $file = MessageLogModel::create([
+        if (UsersModel::where('user_id', $request->user_id)->exists()) {
 
-            'user_id' => $request->user_id,
-            'Item_id' => $request->Item_id,
-            'message' => $request->message,
+            if (FileItemModel::where('id', $request->id)->exists()) {
 
-        ]);
+                $file = MessageLogModel::create([
 
-        $response = ["status" => "200", "message" => "success", "data" => $file];
+                    'user_id' => $request->user_id,
+                    'Item_id' => $request->id,
+                    'message' => $request->message,
 
-        return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+                ]);
+
+                $response = ["status" => "200", "message" => "success", "data" => $file];
+
+                return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+            } else {
+                $response = ["status" => "200", "message" => " file not found"];
+
+                return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+            }
+        } else {
+            $response = ["status" => "200", "message" => " user Not found"];
+
+            return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+        }
     }
-
 
 
     //    this function preform two action 
@@ -304,30 +323,36 @@ class FileItemController extends Controller
     {
 
         $user_id = $request->input('user_id');
-        $Item_id = $request->input('Item_id');
+        $id = $request->input('id');
         $message = $request->input('message');
 
+        if (UsersModel::where('user_id', $request->user_id)->exists()) {
 
-        $file = FileItemModel::where('id', '=', $Item_id)->first();
+            if (FileItemModel::where('id', '=', $request->id)->exists()) {
 
-        $file->status_id = 2;
+                $file = FileItemModel::where('id', '=', $id)->first();
 
-        $file->save();
+                $file->status_id = 2;
 
+                $file->save();
 
-        $addMessage = MessageLogModel::create([
+                $addMessage = MessageLogModel::create([
 
-            'user_id' => $request->user_id,
-            'Item_id' => $request->Item_id,
-            'message' => $request->message,
-        ]);
+                    'user_id' => $request->user_id,
+                    'Item_id' => $request->id,
+                    'message' => $request->message,
+                ]);
 
-
-
-
-        $response = ["status" => "200", "message" => "success"];
-
-        return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+                $response = ["status" => "200", "message" => "sucess"];
+                return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+            } else {
+                $response = ["status" => "200", "message" => "file not found"];
+                return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+            }
+        } else {
+            $response = ["status" => "200", "message" => "user not found "];
+            return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+        }
     }
 
 

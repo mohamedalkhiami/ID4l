@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PKIsingPdfController extends Controller
 {
-    public function PKIsign(Request $request)
+    public function pki_sign_file(Request $request)
     {
         //// get the file from file item table after retriving the file URL and get the file from storage then converted
         // this code resposible for private key signature 
