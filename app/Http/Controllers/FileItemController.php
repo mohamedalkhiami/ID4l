@@ -383,42 +383,6 @@ class FileItemController extends Controller
     }
 
 
-    ///// pki  for now onely will be like this 
-    //// public key infrastruture 
-    //// send item id will check for user and file belong, automaticly move to next user to sign 
-    //// store message log for this process 
-
-    public function pki_sign_file(Request $request)
-    {
-
-
-
-        $Item_id = $request->input('Item_id');
-        $user_id = $request->input('user_id');
-        $key = $request->input('my_secret_key');
-
-        $signer = SignerInfoModel::where('Item_id', '=', $Item_id)->first();
-
-        $signer->singed = true;
-
-        $signer->save();
-
-        $signer->user_id =  $signer->user_id + 1;
-
-        $signer->save();
-
-        $addMessage = MessageLogModel::create([
-
-            'user_id' => $request->user_id,
-
-            'message' => ' signed by  ',
-        ]);
-
-        $response = ["status" => "200", "message" => "success", 'data' => $signer];
-
-        return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
-    }
-
 
     public function e_sign_file(Request $request)
     {
@@ -452,35 +416,51 @@ class FileItemController extends Controller
     public function lock_file(Request $request)
     {
         $user_id = $request->input('user_id');
-        $Item_id = $request->input('Item_id');
+        $id = $request->input('id');
+
+        if (UsersModel::where('user_id', $request->user_id)->exists()) {
+
+            if (FileItemModel::where('id', '=', $request->id)->exists()) {
 
 
-        // $file = FileItemModel::where('id', '=', $Item_id)->get('lock_status')->first();
 
-        $file = FileItemModel::where('id', '=', $Item_id)->get(['id', 'lock_status'])->first();
+                // $file = FileItemModel::where('id', '=', $Item_id)->get('lock_status')->first();
 
-        if ($file->lock_status == true) {
+                $file = FileItemModel::where('id', '=', $id)->get(['id', 'lock_status'])->first();
 
-            echo 'locked failed ';
+
+
+                if ($file->lock_status == true) {
+
+                    echo 'locked failed ';
+                } else {
+                    echo 'file is not locked';
+
+                    $file->lock_status = true;
+
+                    $file->lock_code = rand();
+
+                    $file->save();
+                    MessageLogModel::create([
+
+                        'user_id' => $request->user_id,
+                        'Item_id' => $request->id,
+                        'message' => ' file locked ',
+                    ]);
+                }
+
+                $response = ["status" => "200", "message" => "success", 'data' => $file];
+                return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+            } else {
+
+                $response = ["status" => "200", "message" => "success", "file not found"];
+                return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
+            }
         } else {
-            echo 'file is not locked';
+            $response = ["status" => "200", "message" => "success", "user not found"];
 
-            $file->lock_status = true;
-
-            $file->lock_code = rand();
-
-            $file->save();
-            MessageLogModel::create([
-
-                'user_id' => $request->user_id,
-                'Item_id' => $request->Item_id,
-                'message' => ' file locked ',
-            ]);
+            return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
         }
-
-        $response = ["status" => "200", "message" => "success", 'data' => $file];
-
-        return response(json_encode($response), 200, ["Content-Type" => "application/json",]);
     }
 
     public function login(Request $request)
