@@ -24,14 +24,11 @@ class FileItemController extends Controller
     {
 
 
-
-
         $filePath = $request->file('file_url')->store('public');
 
         $insert =  Storage::put('public', $request->file('file_url'));
 
         $url = Storage::url($insert);
-
 
         $path = basename($filePath);
 
@@ -47,41 +44,40 @@ class FileItemController extends Controller
         ]);
 
         $lastInsertedId = $createFile->id;
-        $data = array();
-        foreach ($request->singer as $key => $singer) {
+
+        $singers = $request->input('singer');
+
+        // loop through all singer
+        foreach ($singers as $singer) {
 
 
+            $singer['user_id'];
+            $singer['sequence'];
 
-
-
-            $data[] = array('user_id' => $singer, 'sequence' => $request->sequence[$key]);
+            $createFile = SignerInfoModel::create([
+                'Item_id' => $lastInsertedId,
+                'user_id' =>   $singer['user_id'],
+                'sequence' =>  $singer['sequence'],
+            ]);
         }
 
-        $createFile = SignerInfoModel::create([
-            'Item_id' => $lastInsertedId,
-            'user_id' => $singer,
-            'sequence' => $request->sequence[$key]
-        ]);
 
 
 
-        ////// viwer infor to add users
+        $viewers = $request->input('viewer');
 
-        $data1 = array();
+        // loop through all viwer
+        foreach ($viewers as $viewer) {
 
-        foreach ($request->viwer_id as $key => $viwer_id) {
-
-
+            $viewer['user_id'];
             $createFile = ViewerInfoModel::create([
                 'Item_id' => $lastInsertedId,
+                'user_id' =>   $viewer['user_id']
 
-                'user_id' => $request->viwer_id[$key]
             ]);
-
-
-
-            $data1[] = array('Item_id' => $lastInsertedId, 'user_id' => $request->viwer_id[$key]);
         }
+
+
 
 
         $resposedata = array(
@@ -91,20 +87,11 @@ class FileItemController extends Controller
             'status_id' => $request->status_id,
             'sign_id' => $request->sign_id,
             'sign_sequence_id' => $request->sign_sequence_id,
-            'singer' => $data,
-            'viewer' => $data1,
+            'singer' => $singers,
+            'viewer' => $viewers,
             'file_url' => asset('/storage/' . $path),
         );
 
-
-        // return asset('/storage/' . $path);
-
-
-
-        // return Response::make(file_get_contents(asset('/storage/' . $insert)), 200, [
-        //     'Content-Type' => 'application/pdf',
-
-        // ]);
 
 
 

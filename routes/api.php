@@ -70,3 +70,6 @@ Route::post('display', 'FileItemController@display');
 
 
 Route::post('PKIsign', 'PKIsingPdfController@PKIsign');
+
+
+Route::post('item', 'ArrayAPI@item');
